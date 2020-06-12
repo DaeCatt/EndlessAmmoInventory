@@ -13,12 +13,11 @@ namespace EndlessAmmoInventory.UI {
 			texture.Draw(spriteBatch, rect, Main.inventoryBack, detailScale);
 		}
 
-		public static void DrawItem(SpriteBatch spriteBatch, Rect rect, Item item, float scale = 1) {
+		public static void DrawItem(SpriteBatch spriteBatch, Rect rect, Item item, Color color, float scale = 1) {
 			Texture2D itemTexture = Main.itemTexture[item.type];
 			Rectangle itemSourceRect = (Main.itemAnimations[item.type] == null) ? itemTexture.Frame() : Main.itemAnimations[item.type].GetFrame(itemTexture);
 
-			Color color = Main.inventoryBack;
-			Color currentColor = Main.inventoryBack;
+			Color currentColor = color;
 
 			float secondaryScale = 1f;
 			ItemSlot.GetItemLight(ref currentColor, ref secondaryScale, item);
@@ -43,11 +42,6 @@ namespace EndlessAmmoInventory.UI {
 			}
 
 			ItemLoader.PostDrawInInventory(item, spriteBatch, itemPosition, itemSourceRect, item.GetAlpha(currentColor), item.GetColor(color), origin, finalScale);
-		}
-
-		public static void DrawItemSlot(SpriteBatch spriteBatch, Rect rect, Item item, float scale = 1) {
-			DrawPanel(spriteBatch, rect, scale);
-			DrawItem(spriteBatch, rect, item, scale);
 		}
 	}
 }

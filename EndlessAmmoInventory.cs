@@ -50,7 +50,7 @@ namespace EndlessAmmoInventory {
 			if (inventoryIndex == -1)
 				throw new Exception("Could not find 'Vanilla: Inventory'");
 
-			layers.Insert(inventoryIndex, new LegacyGameInterfaceLayer(
+			layers.Insert(inventoryIndex + 1, new LegacyGameInterfaceLayer(
 				"DaesMod: Endless Ammo UI",
 				delegate {
 					if (Main.playerInventory) {

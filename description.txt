@@ -2,3 +2,5 @@ EndlessAmmoInventory adds a new item crafted at the Crystal Ball using an Endles
 
 The Endless Ammo inventory can be used to convert any common consumable ammo (bullets, arrows, rockets, or solutions) in the game (except seeds) into a permanently unlocked endless ammo.
 Ammo provided by other mods should be supported, but has not been thoroughly tested.
+
+The Endless Ammo UI currently doesn't support dragging the scrollbar. Support for this is coming in a future version.

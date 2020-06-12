@@ -33,7 +33,7 @@ namespace EndlessAmmoInventory.UI {
 		public static readonly int UNLOCK_AMOUNT = 3996;
 		public static int AmmoPicker = AmmoID.None;
 
-		public Color PreviewColor = new Color(255 / 2, 255 / 2, 255 / 2, 255 / 2);
+		public Color PreviewColor = new Color(255 / 3, 255 / 3, 255 / 3, 255 / 3);
 		private Color UnlockColor = new Color(255, 215, 0);
 
 		private static readonly int DeltaX = 534 - 497;
@@ -41,6 +41,7 @@ namespace EndlessAmmoInventory.UI {
 		private static RasterizerState overflowHiddenState;
 
 		private readonly VelocityAnimation ScrollPosition = new VelocityAnimation();
+		// public static bool IsDraggingScrollbar = false;
 
 		private bool isMasked = false;
 		private Rectangle scissorRectangle;
@@ -133,7 +134,9 @@ namespace EndlessAmmoInventory.UI {
 				Main.inventoryScale * (52 + (56 * Math.Min(3, ammoData.Count - 1)))
 			);
 
+			// float scrollMin = 0;
 			float scrollTop = (float) (ScrollPosition.GetValue() * unit);
+			// float scrollMax = (ammoData.Count - 4) * unit;
 
 			float scrollbarWidth = 20 * Main.inventoryScale;
 			bool drawScrollbar = ammoData.Count > 4;
@@ -150,7 +153,12 @@ namespace EndlessAmmoInventory.UI {
 				float scrollHeight = Main.inventoryScale * (52 + (56 * (ammoData.Count - 1)));
 				Scrollbar.Draw(spriteBatch, scrollbarRect, offsetHeight, scrollHeight, scrollTop, Main.inventoryBack, Main.inventoryScale);
 
-				MaskDrawTo(spriteBatch, 1 + (int) dropdownRect.X, 1 + (int) dropdownRect.Y, ((int) dropdownRect.Width) - 2, ((int) dropdownRect.Height) - 2);
+				MaskDrawTo(spriteBatch,
+					1 + (int) (Main.UIScale * dropdownRect.X),
+					1 + (int) (Main.UIScale * dropdownRect.Y),
+					((int) (Main.UIScale * dropdownRect.Width)) - 2,
+					((int) (Main.UIScale * dropdownRect.Height)) - 2
+				);
 			}
 
 			Rect itemRect = new Rect(dx, 105 - scrollTop, 52, 52);
@@ -171,7 +179,7 @@ namespace EndlessAmmoInventory.UI {
 				}
 
 				AmmoData ammo = ammoData[i];
-				ScalableItemSlot.DrawItem(spriteBatch, itemRect, ammo.Item, Main.inventoryScale);
+				ScalableItemSlot.DrawItem(spriteBatch, itemRect, ammo.Item, Main.inventoryBack, Main.inventoryScale);
 
 				Vector2 position = itemRect.ClonePosition();
 				position.X += unit;
@@ -326,11 +334,11 @@ namespace EndlessAmmoInventory.UI {
 				if (ammo.type == ItemID.None) {
 					Item refItem = new Item();
 					refItem.SetDefaults(AmmoType.PreviewItemType);
-					ScalableItemSlot.DrawItem(spriteBatch, slotRect, refItem, Main.inventoryScale);
 					ScalableItemSlot.DrawPanel(spriteBatch, slotRect, Main.inventoryScale);
+					ScalableItemSlot.DrawItem(spriteBatch, slotRect, refItem, PreviewColor, Main.inventoryScale);
 				} else {
 					ScalableItemSlot.DrawPanel(spriteBatch, slotRect, Main.inventoryScale);
-					ScalableItemSlot.DrawItem(spriteBatch, slotRect, ammo, Main.inventoryScale);
+					ScalableItemSlot.DrawItem(spriteBatch, slotRect, ammo, Main.inventoryBack, Main.inventoryScale);
 				}
 
 				if (modPlayer.CanUnlockAmmoForType(AmmoType.Type)) {
