@@ -1,0 +1,9 @@
+displayName = Endless Ammo Inventory
+author = DaeCatt
+version = 1.0
+homepage = https://github.com/DaeCatt/EndlessAmmoInventory
+hideCode = false
+hideResources = false
+includeSource = true
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+includePDB = false

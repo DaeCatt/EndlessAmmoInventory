@@ -1,0 +1,4 @@
+EndlessAmmoInventory adds a new item crafted at the Crystal Ball using an Endless Musket Pouch and an Endless Quiver to unlock a part of the inventory to manage Endless Ammo.
+
+The Endless Ammo inventory can be used to convert any common consumable ammo (bullets, arrows, rockets, or solutions) in the game (except seeds) into a permanently unlocked endless ammo.
+Ammo provided by other mods should be supported, but has not been thoroughly tested.
