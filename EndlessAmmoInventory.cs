@@ -253,7 +253,6 @@ namespace EndlessAmmoInventory {
 			ModRecipe recipe = new ModRecipe(mod);
 			recipe.AddIngredient(ItemID.EndlessMusketPouch);
 			recipe.AddIngredient(ItemID.EndlessQuiver);
-			recipe.AddTile(TileID.TinkerersWorkbench);
 			recipe.AddTile(TileID.CrystalBall);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

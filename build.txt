@@ -1,6 +1,6 @@
 displayName = Endless Ammo Inventory
 author = DaeCatt
-version = 1.0
+version = 1.0.1
 homepage = https://github.com/DaeCatt/EndlessAmmoInventory
 hideCode = false
 hideResources = false
