@@ -35,21 +35,11 @@ namespace EndlessAmmoInventory.Data {
 			foreach (EndlessAmmoType EndlessAmmoType in EndlessAmmoTypes)
 				AmmoIds.Add(EndlessAmmoType.Type);
 
-			int i = 1;
-			Item item = new Item();
-			for (; i < ItemID.Count; i++) {
-				if (i == ItemID.Seed)
-					continue;
-
-				item.SetDefaults(i);
+			for (int type = 0; type < ItemLoader.ItemCount; type++) {
+				Item item = new Item();
+				item.SetDefaults(type);
 				if (item.consumable && AmmoIds.Contains(item.ammo))
 					AmmoItems.Add(item.Clone());
-			}
-
-			for (; i < ItemLoader.ItemCount; i++) {
-				ModItem modItem = ItemLoader.GetItem(i);
-				if (modItem.item.consumable && AmmoIds.Contains(modItem.item.ammo))
-					AmmoItems.Add(modItem.item.Clone());
 			}
 		}
 

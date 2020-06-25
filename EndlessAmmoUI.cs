@@ -46,15 +46,15 @@ namespace EndlessAmmoInventory.UI {
 		private bool isMasked = false;
 		private Rectangle scissorRectangle;
 		private void MaskDrawTo(SpriteBatch spriteBatch, int x, int y, int width, int height) {
-			if (isMasked)
-				throw new Exception("spriteBatch is already masked.");
-
-			isMasked = true;
-			scissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
-
+			if (!isMasked) {
+				scissorRectangle = spriteBatch.GraphicsDevice.ScissorRectangle;
+			}
+			
+			Rectangle newScissorRect = Rectangle.Intersect(new Rectangle(x, y, width, height), scissorRectangle);
 			spriteBatch.End();
-			spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(new Rectangle(x, y, width, height), scissorRectangle);
+			spriteBatch.GraphicsDevice.ScissorRectangle = newScissorRect;
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, overflowHiddenState, null, Main.UIScaleMatrix);
+			isMasked = true;
 		}
 
 		private void ResetMask(SpriteBatch spriteBatch) {
@@ -242,10 +242,7 @@ namespace EndlessAmmoInventory.UI {
 					}
 
 					if (itemRect.Contains(mousePoint)) {
-						hoverItem = ammo.Item.Clone();
-						hoverItem.ammo = 0;
-						hoverItem.material = false;
-						hoverItem.consumable = false;
+						hoverItem = ammo.Item;
 					} else if (ammo.Unlocked) {
 						mouseText = string.Format("Select {0}", ammo.Item.Name);
 					} else if (ammo.CanUnlock) {
@@ -278,7 +275,7 @@ namespace EndlessAmmoInventory.UI {
 			ResetMask(spriteBatch);
 		}
 
-		private void DrawUnlockedAmmo(SpriteBatch spriteBatch, EndlessAmmoPlayer modPlayer, ref string mouseText, ref Item hoverItem) {
+		private void DrawUnlockedAmmo(SpriteBatch spriteBatch, EndlessAmmoPlayer modPlayer, ref string mouseText, ref Item hoverAmmo) {
 			Vector2 stringScale = Vector2.One * 0.75f;
 
 			int dx = LeftX;
@@ -360,10 +357,7 @@ namespace EndlessAmmoInventory.UI {
 				if (AmmoPicker == AmmoID.None && slotRect.Contains(mousePoint)) {
 					Main.LocalPlayer.mouseInterface = true;
 					if (ammo.type != ItemID.None) {
-						hoverItem = ammo.Clone();
-						hoverItem.ammo = 0;
-						hoverItem.material = false;
-						hoverItem.consumable = false;
+						hoverAmmo = ammo;
 					} else {
 						mouseText = DataContainer.EndlessAmmoTypes[i].NoSelected;
 					}
@@ -386,23 +380,26 @@ namespace EndlessAmmoInventory.UI {
 			Main.inventoryScale = 0.6f;
 
 			string mouseText = "";
-			Item hoverItem = null;
+			Item hoverAmmo = null;
 
 			if (AmmoPicker != AmmoID.None) {
-				DrawAmmoPicker(spriteBatch, modPlayer, ref mouseText, ref hoverItem);
+				DrawAmmoPicker(spriteBatch, modPlayer, ref mouseText, ref hoverAmmo);
 			} else {
 				ScrollPosition.SetValueImmediate(0);
-				DrawUnlockedAmmo(spriteBatch, modPlayer, ref mouseText, ref hoverItem);
+				DrawUnlockedAmmo(spriteBatch, modPlayer, ref mouseText, ref hoverAmmo);
 			}
 
-			if (hoverItem != null) {
-				Main.HoverItem = hoverItem.Clone();
-				Main.instance.MouseText(hoverItem.Name, hoverItem.rare, 0);
+			if (hoverAmmo != null) {
+				Main.HoverItem = hoverAmmo.Clone();
+				Main.HoverItem.ammo = 0;
+				Main.HoverItem.material = false;
+				Main.HoverItem.consumable = false;
+				try {
+					Main.instance.MouseText(hoverAmmo.Name, hoverAmmo.rare, 0); // hoverItem.Name, hoverItem.rare, 0
+				} catch {}
 			} else if (mouseText != "") {
 				Main.instance.MouseText(mouseText);
 			}
-
-			base.Draw(spriteBatch);
 		}
 	}
 }
